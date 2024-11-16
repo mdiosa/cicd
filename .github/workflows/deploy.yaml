@@ -1,4 +1,4 @@
-name: Deploy Pipeline For Terraform
+name: Deploy Pipeline For Terraform final
 
 on:
   pull_request:
@@ -7,6 +7,7 @@ on:
       - main 
     paths: 
       - 'terraform/**'
+  
 jobs:
   terraform:
     name: Deploy

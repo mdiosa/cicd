@@ -8,7 +8,7 @@ on:
       - 'webapp/**'
       - '.github/workflows/webapp.yml'
 
-jobs:
+jobs: 
   terraform:
     name: Deploy
     runs-on: ubuntu-latest
@@ -23,6 +23,20 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: "eu-west-1"
+    
+    - name: Check if webapp/ directory exists and contains files
+      run: |
+        if [ -d "webapp" ] && [ "$(ls -A webapp)" ]; then
+          echo "webapp/ directory exists and contains files."
+        else
+          echo "webapp/ directory is missing or empty. Please check."
+          exit 1
+        fi
+    - name: Check if bucket exist
+      run: |
+        aws s3 ls
+
     - name: Deploy to AWS S3
       run: |
-        aws s3 cp webapp/index.html s3://lecloudfacile-mariama-007/
+        echo "Uploading files to S3..."
+        aws s3 cp webapp/ s3://lecloudfacile-mariama-007/ --recursive --region eu-west-1
